@@ -1,0 +1,127 @@
+{% extends 'base-maps.html' %}
+
+{% block body %}
+    <div class="nav">
+        <form action="{{ url_for('main.gis') }}" method="POST" id="formsearch">
+            <div id="nav-search" class="nav-search">
+                <button id="sidebar-btn" class="sidebar-btn"><div></div></button>
+                <input type="text" name="search" id="search" class="search {% if id %} active {% endif %}" placeholder="Temukan Disini" spellcheck="false" autocomplete="off" {% if not id %} autofocus=True {% endif %} {% if id %} value="{{ search }}" disabled {% endif %}>
+                <div id="nav-btn" class="nav-btn">
+                    {% if id %}
+                        <button id="reset-btn" class="reset-btn"><div></div></button>
+                    {% else %}
+                        <button name="search-btn" id="search-btn" class="search-btn" value="search"><div></div></button>
+                    {% endif %}
+                </div>
+                <div id="result" class="navresult">
+                    <div id="result-list" class="result-list">
+                        <ul class="search-list" id="search-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div>
+            <div id="view-sidebar" class="view-sidebar"></div>
+            <div id="sidebar" class="sidebar">
+                <div class="brand-link">
+                    <img src="{{ url_for('static', filename='img/logo-stp-dark.png') }}" alt="Science Techno Park" class="brand-image" style="opacity: .8">
+                    <span class="brand-text">Science Techno Park</span>
+                </div>
+                <button id="close-btn" class="close-btn"></button>
+                {% if current_user.is_authenticated %}
+                    <div class="profile">
+                        <button id="profile-btn" class="profile-btn">
+                            {% if not foto %}
+                            <img src="{{ url_for('static', filename='img/user.png') }}" class="img-circle elevation-2" alt="User Image">
+                            {% else %}
+                            <img src="{{ url_for('static', filename='img/uploaded_images/users/'+foto) }}" class="img-circle elevation-2" alt="User Image">
+                            {% endif %}
+                            <span id="info-img" class="info-img">{{ name }}</span>
+                            <div id="right-img" class="right-img"></div>
+                        </button>
+                    </div>
+                {% endif %}
+                <div class="menu">
+                    <li>
+                        <button id="beranda">
+                            <div class="home-btn"></div>
+                            <span id="label-beranda">Beranda</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button id="dashboard">
+                            <div class="dashboard-btn"></div>
+                            <span id="label-dashboard">Dashboard</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button id="inputdata">
+                            <div class="inputdata-btn"></div>
+                            <span  id="label-inputdata">Input Data</span>
+                        </button>
+                    </li>
+                </div>
+            </div>
+        </div>
+        {% if id %}
+            <div id="overlay-info" class="overlay overlay-info">
+                <div id="title-overlay-info" class="title-overlay">
+                    <div class="info-icon"></div><span class="title">Info</span><div id="minimize-info" class="minimize"></div>
+                </div>
+                <div class="content-overlay">
+                    <div class="content-overlay-div">
+                        {% if id %}
+                            <div class="content-location">
+                                <p class="content-name">Desa {{ data.nama }}</p>
+                                <p class="content-info">Kec. {{ data.kecamatan.nama }}</p>
+                                <p class="content-info">Kab. {{ data.kecamatan.kabupaten.nama }}</p>
+                                <p class="content-info">{{ data.kecamatan.kabupaten.provinsi.nama }}</p>
+                            </div>
+                        {% else %}
+                            <div>
+                                <p class="content-empty">Tidak ada data</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div id="overlay-layers" class="overlay overlay-layers">
+                <div id="title-overlay-layers" class="title-overlay">
+                    <div class="layers-icon"></div><span class="title">Layer</span><div id="minimize-layers" class="minimize"></div>
+                </div>
+                <div class="content-overlay">
+                    <div class="content-overlay-div">
+                        {% if id %}
+                            <article>
+                                <input type="checkbox" checked>
+                                <div></div>
+                            </article>
+                            {% if maps == 'desa' %}
+                                <div>
+                                    <p class="content">Desa {{ data.nama }} <img src="{{ url_for('static', filename='img/polygon.svg') }}" alt="Polygon" class="polygon"></p>
+                                </div>
+                            {% else %}
+                                <div>
+                                    <p class="content">Lahan {{ data.petani.nama }} <img src="{{ url_for('static', filename='img/polygon.svg') }}" alt="Polygon" class="polygon"></p>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div>
+                                <p class="content-empty">Tidak ada data</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="widget">
+                <div class="wg-info" id="wg-info"></div>
+                <div class="wg-layers" id="wg-layers"></div>
+                <div class="wg-graph" id="wg-graph"></div>
+                <div class="wg-bookmark" id="wg-bookmark"></div>
+            </div>
+            <div class="focus" id="focus-btn">
+                <div class="focus-btn"></div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

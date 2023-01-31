@@ -1,0 +1,377 @@
+{% extends 'base-input-data.html' %}
+
+{% block head %}
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-buttons/css/buttons.bootstrap4.min.css">
+{% endblock %}
+
+{% block body %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-success alert-dismissable" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                      <span aria-hidden="true" class="bi bi-x-lg"></span>
+                  </button>
+                {% if category == 'pass-error'%}
+                  {{ message }}.
+                {% else %}
+                  {{ message }}.
+                {% endif %}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Tabel Data Log Pupuk Pertanian</h3>
+                <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body" style="padding:20px 20px 0px 20px">
+                <table id="example2" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Petani</th>
+                      <th>Alamat</th>
+                      <th>Komoditas</th>
+                      <th>Waktu Tanam</th>
+                      <th>Waktu Panen</th>
+                      <th>Pupuk</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in log_pupuk_pertanian.items %}
+                      <tr>
+                        <td>{{row.id_detaillog}}</td>
+                        <td>{{row.log_tanam.lahan.petani.nama}}</td>
+                        <td>{{row.log_tanam.lahan.alamat}}</td>
+                        <td>{{row.log_tanam.komoditas.nama}}</td>
+                        <td>{{row.log_tanam.tgl_mulai}}</td>
+                        <td>{{row.log_tanam.tgl_selesai}}</td>
+                        <td>{{row.pupuk.nama}}</td>
+                        <td>
+                          <a class="edit-input-data-btn" href="/input-data/data-log-pupuk-pertanian/update/{{row.id_detaillog}}" data-toggle="modal" data-target="#modaledit{{row.id_detaillog}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-log-pupuk-pertanian/delete/{{row.id_detaillog}}" data-toggle="modal" data-target="#modaldelete{{row.id_detaillog}}">Hapus</a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+              <div class="card-body" style="padding: 10px 20px 20px 20px">
+                <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                      <div class="dataTables_info" id="example2_info" role="status" aria-live="polite" style="padding: 10px 0px 0px 0px">Menampilkan {{fdata}}-{{ldata}} dari {{data}} entri</div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                      <div class="dataTables_paginate paging_simple_numbers">
+                        <ul class="pagination">
+                          {% if log_pupuk_pertanian.has_prev %}
+                            <li class="paginate_button page-item previous"><a href="{{ url_for('main.input_data_log_pupuk_pertanian', page=log_pupuk_pertanian.prev_num) }}" class="page-link">&lt;</a></li>
+                          {% else %}
+                            <li class="paginate_button page-item previous disabled"><a href="#" class="page-link">&lt;</a></li>
+                          {% endif %}
+                          <li class="paginate_button page-item active">
+                            <a class="page-link">{{page}}</a>
+                          </li>
+                          {% if log_pupuk_pertanian.has_next %}
+                            <li class="paginate_button page-item next"><a href="{{ url_for('main.input_data_log_pupuk_pertanian', page=log_pupuk_pertanian.next_num) }}" class="page-link">&gt;</a></li>
+                          {% else %}
+                            <li class="paginate_button page-item next disabled"><a href="#" class="page-link">&gt;</a></li>
+                          {% endif %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+  <!-- Modal Edit Log Pupuk Pertanian-->
+  {% for row in log_pupuk_pertanian.items %}
+    <div id="modaledit{{row.id_detaillog}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Ubah Data Log Pupuk Pertanian</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+              <form action="{{ url_for('main.input_data_log_pupuk_pertanian_update') }}" method="POST">
+                <div class="form-group input-group">
+                  <input type="hidden"  name="id_detaillog" value="{{row.id_detaillog}}">
+                  <select name="pupuk" class="form-control add"> 
+                    <option value="{{row.pupuk.nama}}" disabled selected hidden>{{row.pupuk.nama}}</option>  
+                    {% for row in pupuk %} 
+                      <option value="{{ row.id_pupuk }}">{{ row.id_pupuk }} | {{ row.nama }}</option>
+                    {% endfor %}
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-primary btn-wrn" type="submit">Ubah</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+              
+  <!-- Modal Add Log Pupuk Pertanian-->
+  <div id="mymodal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Tambah Log Pupuk Pertanian</h4>
+          </div>
+          <div class="modal-body card-body register-card-body">
+            <form action="{{url_for('main.input_data_log_pupuk_pertanian_add')}}" method="POST">
+              <div class="form-group input-group">
+                <select name="provinsi" id="prov-add-response" class="form-control add" required> 
+                  <option value="" disabled selected hidden>Provinsi</option>  
+                  {% for row in provinsi %} 
+                    <option value="{{ row.id_prov }}">{{ row.id_prov }} | {{ row.nama }}</option>
+                  {% endfor %}
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="kabupaten" class="form-control add" id="kab-add-response" required> 
+                  <option value="" disabled selected hidden>Kabupaten</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="kecamatan" class="form-control add" id="kec-add-response" required> 
+                  <option value="" disabled selected hidden>Kecamatan</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="desa" class="form-control add" id="desa-add-response" required> 
+                  <option value="" disabled selected hidden>Desa</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="poktan" class="form-control add" id="poktan-add-response" required> 
+                  <option value="" disabled selected hidden>Kelompok Tani</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="petani" class="form-control add" id="petani-add-response" required> 
+                  <option value="" disabled selected hidden>Petani</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="lahan" class="form-control add" id="lahan-add-response" required> 
+                  <option value="" disabled selected hidden>Lahan</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="log" class="form-control add" id="log-tanam-add-response" required> 
+                  <option value="" disabled selected hidden>Waktu Tanam</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-calendar"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="pupuk" class="form-control add" required> 
+                  <option value="" disabled selected hidden>Pupuk</option>  
+                  {% for row in pupuk %} 
+                    <option value="{{ row.id_pupuk }}">{{ row.id_pupuk }} | {{ row.nama }}</option>
+                  {% endfor %}
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary btn-success" type="submit">Tambah</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              </div>
+            </form>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Delete Log Pupuk Pertanian-->
+  {% for row in log_pupuk_pertanian.items %}
+    <div id="modaldelete{{row.id_detaillog}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Hapus Data Log Pupuk Pertanian</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+              <h6><b>Nama Petani</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.log_tanam.lahan.petani.nama}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Alamat Lahan</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.log_tanam.lahan.alamat}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Komoditas</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.log_tanam.komoditas.nama}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Waktu Tanam</b></h6>
+              <div class="form-group input-group">
+                <input type="date" class="form-control" value="{{row.log_tanam.tgl_mulai}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-calendar"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Waktu Panen</b></h6>
+              <div class="form-group input-group">
+                <input type="date" class="form-control" value="{{row.log_tanam.tgl_selesai}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-calendar"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Pupuk</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.pupuk.nama}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <form action="{{ url_for('main.input_data_log_pupuk_pertanian_delete') }}" method="POST">
+                  <div class="modal-footer">
+                    <input type="hidden"  name="id_detaillog" value="{{row.id_detaillog}}">
+                    <button class="btn btn-primary btn-dgr" type="submit">Hapus</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+  <!-- DataTables  & Plugins -->
+  <script src="../static/plugins/dashboard/datatables/jquery.dataTables.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/jszip/jszip.min.js"></script>
+  <script src="../static/plugins/dashboard/pdfmake/pdfmake.min.js"></script>
+  <script src="../static/plugins/dashboard/pdfmake/vfs_fonts.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.html5.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.print.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.colVis.min.js"></script>
+  <script>
+    $(function () {
+      $('#example2').DataTable({
+        "paging": false,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": false,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
+{% endblock %}

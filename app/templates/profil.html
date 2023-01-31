@@ -1,0 +1,129 @@
+{% extends 'base-profil.html' %}
+
+{% block body %}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-success alert-dismissable" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                      <span aria-hidden="true" class="bi bi-x-lg"></span>
+                  </button>
+                {% if category == 'pass-error'%}
+                  {{ message }}.
+                {% else %}
+                  {{ message }}.
+                {% endif %}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+
+            <!-- Profile Image -->
+            <div class="card card-primary card-outline">
+                <div class="card-body box-profile">
+                <div class="text-center">
+                    {% if not foto %}
+                    <img class="profile-user-img img-fluid img-circle" src="../static/img/user.png" alt="User profile picture">
+                    {% else %}
+                    <img class="profile-user-img img-fluid img-circle" src="../static/img/uploaded_images/users/{{ foto }}" alt="User profile picture">
+                    {% endif %}
+                </div>
+
+                <h3 class="profile-username text-center">{{ name }}</h3>
+
+                <p class="text-muted text-center">
+                    {% if level==1 %}Admin{% endif %}
+                    {% if level==2 %}Operator Geospasial{% endif %}
+                    {% if level==3 %}Operator Non-Geospasial{% endif %}
+                    {% if level==4 %}Super User{% endif %}
+                    {% if level==5 %}User{% endif %}
+                </p>
+
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+            <!-- About Me Box -->
+            <div class="card card-primary">
+                <div class="card-header">
+                <h3 class="card-title">Tentang Saya</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                <strong><i class="fas fa-envelope mr-1"></i> Email</strong>
+
+                <p class="text-muted">
+                    {{ email }}
+                </p>
+
+                <hr>
+
+                <strong><i class="fas fa-address-book mr-1"></i> Telp/No. Hp</strong>
+
+                <p class="text-muted">{{ telp }}</p>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+            <div class="card">
+                <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a class="nav-link active" href="#comingsoon" data-toggle="tab">Coming Soon</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#nextcomingsoon" data-toggle="tab">Coming Soon</a></li>
+                </ul>
+                </div><!-- /.card-header -->
+                <div class="card-body">
+                <div class="tab-content">
+                    <div class="active tab-pane" id="comingsoon">
+                        <!-- Post -->
+                        <div class="post">
+                            <p>
+                            Coming Soon
+                            </p>
+                        </div>
+                    <!-- /.post -->
+                    </div>
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="nextcomingsoon">
+                        <!-- Post -->
+                        <div class="post">
+                            <p>
+                            Yeah! Coming Soon
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+                </div><!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+{% endblock %}

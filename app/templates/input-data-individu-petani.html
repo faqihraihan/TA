@@ -1,0 +1,537 @@
+{% extends 'base-input-data.html' %}
+
+{% block head %}
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-buttons/css/buttons.bootstrap4.min.css">
+{% endblock %}
+
+{% block body %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-success alert-dismissable" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                      <span aria-hidden="true" class="bi bi-x-lg"></span>
+                  </button>
+                {% if category == 'pass-error'%}
+                  {{ message }}.
+                {% else %}
+                  {{ message }}.
+                {% endif %}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Tabel Data Individu Petani</h3>
+                <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body" style="padding:20px 20px 0px 20px">
+                <table id="example2" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nama Petani</th>
+                      <th>NIK</th>
+                      <th>No. KK</th>
+                      <th>No. KTP</th>
+                      <th>Tempat Lahir</th>
+                      <th>Tanggal Lahir</th>
+                      <th>Telp/No. Hp</th>
+                      <th>Alamat</th>
+                      <th>Foto</th>
+                      <th>Koordinat</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in individu_petani.items %}
+                      <tr>
+                        <td>{{row.id_petani}}</td>
+                        <td>{{row.nama}}</td>
+                        <td>{{row.nik}}</td>
+                        <td>{{row.no_kk}}</td>
+                        <td>{{row.no_ktp}}</td>
+                        <td>{{row.tempat_lahir}}</td>
+                        <td>{{row.tanggal_lahir}}</td>
+                        <td>{{row.telp}}</td>
+                        <td>{{row.alamat}}</td>
+                        <td>
+                          {% if row.foto %}
+                          <img src="../static/img/uploaded_images/petani/{{row.foto}}" class="img-circle img-petani" alt="Petani Image">
+                          {% endif %}
+                        </td>
+                        <td>{{row.pin_kordinat}}</td>
+                        <td>
+                          <a class="edit-input-data-btn" href="/input-data/data-individu-petani/update/{{row.id_petani}}" data-toggle="modal" data-target="#modaledit{{row.id_petani}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-individu-petani/delete/{{row.id_petani}}" data-toggle="modal" data-target="#modaldelete{{row.id_petani}}">Hapus</a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+              <div class="card-body" style="padding: 10px 20px 20px 20px">
+                <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                      <div class="dataTables_info" id="example2_info" role="status" aria-live="polite" style="padding: 10px 0px 0px 0px">Menampilkan {{fdata}}-{{ldata}} dari {{data}} entri</div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                      <div class="dataTables_paginate paging_simple_numbers">
+                        <ul class="pagination">
+                          {% if individu_petani.has_prev %}
+                            <li class="paginate_button page-item previous"><a href="{{ url_for('main.input_data_individu_petani', page=individu_petani.prev_num) }}" class="page-link">&lt;</a></li>
+                          {% else %}
+                            <li class="paginate_button page-item previous disabled"><a href="#" class="page-link">&lt;</a></li>
+                          {% endif %}
+                          <li class="paginate_button page-item active">
+                            <a class="page-link">{{page}}</a>
+                          </li>
+                          {% if individu_petani.has_next %}
+                            <li class="paginate_button page-item next"><a href="{{ url_for('main.input_data_individu_petani', page=individu_petani.next_num) }}" class="page-link">&gt;</a></li>
+                          {% else %}
+                            <li class="paginate_button page-item next disabled"><a href="#" class="page-link">&gt;</a></li>
+                          {% endif %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+  <!-- Modal Edit Individu Petani-->
+  {% for row in individu_petani.items %}
+    <div id="modaledit{{row.id_petani}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Ubah Data Petani</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+              <form action="{{ url_for('main.input_data_individu_petani_update') }}" enctype="multipart/form-data" method="POST">
+                <div class="form-group input-group">
+                  <input type="hidden"  name="id_petani" value="{{row.id_petani}}">
+                  <input type="text" class="form-control" name="nama" placeholder="Nama Petani" value="{{row.nama}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-user"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="number" class="form-control" name="nik" placeholder="NIK" value="{{row.nik}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="number" class="form-control" name="no_kk" placeholder="No. KK" value="{{row.no_kk}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="number" class="form-control" name="no_ktp" placeholder="No. KTP" value="{{row.no_ktp}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="text" class="form-control" name="tempat_lahir" placeholder="Tempat Lahir" value="{{row.tempat_lahir}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="date" class="form-control" name="tanggal_lahir" placeholder="Tanggal Lahir" value="{{row.tanggal_lahir}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="number" class="form-control" name="telp" placeholder="Telp/No. Hp" value="{{row.telp}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="text" class="form-control" name="alamat" placeholder="Alamat" value="{{row.alamat}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="file" class="form-control" name="foto" placeholder="Foto" value="{{row.foto}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-user"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="text" class="form-control" name="pin_koordinat" placeholder="Koordinat" value="{{row.pin_kordinat}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-primary btn-wrn" type="submit">Ubah</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+              
+  <!-- Modal Add Individu Petani-->
+  <div id="mymodal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Tambah Petani</h4>
+          </div>
+          <div class="modal-body card-body register-card-body">
+            <form action="{{url_for('main.input_data_individu_petani_add')}}" enctype="multipart/form-data" method="POST">
+              <div class="form-group input-group">
+                <select name="provinsi" id="prov-add-response" class="form-control add" required> 
+                  <option value="" disabled selected hidden>Provinsi</option>  
+                  {% for row in provinsi %} 
+                    <option value="{{ row.id_prov }}">{{ row.id_prov }} | {{ row.nama }}</option>
+                  {% endfor %}
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="kabupaten" class="form-control add" id="kab-add-response" required> 
+                  <option value="" disabled selected hidden>Kabupaten</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="kecamatan" class="form-control add" id="kec-add-response" required> 
+                  <option value="" disabled selected hidden>Kecamatan</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="desa" class="form-control add" id="desa-add-response" required> 
+                  <option value="" disabled selected hidden>Desa</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="poktan" class="form-control add" id="poktan-add-response" required> 
+                  <option value="" disabled selected hidden>Kelompok Tani</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" name="id_petani" placeholder="ID Petani" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" name="nama" placeholder="Nama Petani" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" name="nik" placeholder="NIK" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" name="no_kk" placeholder="No. KK" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" name="no_ktp" placeholder="No. KTP" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" name="tempat_lahir" placeholder="Tempat Lahir">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="date" class="form-control" name="tanggal_lahir" placeholder="Tanggal Lahir">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-calendar"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" name="telp" placeholder="Telp/No. Hp">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                  <input type="text" class="form-control" name="alamat" placeholder="Alamat">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+              </div>
+              <div class="form-group input-group">
+                  <input type="file" class="form-control" name="foto" placeholder="Foto">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+              </div>
+              <div class="form-group input-group">
+                  <input type="text" class="form-control" name="pin_koordinat" placeholder="Koordinat">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary btn-success" type="submit">Tambah</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              </div>
+            </form>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Delete Individu Petani-->
+  {% for row in individu_petani.items %}
+    <div id="modaldelete{{row.id_petani}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Hapus Data Petani</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+              <h6><b>ID</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.id_petani}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Nama Petani</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.nama}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>NIK</b></h6>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" value="{{row.nik}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>No. KK</b></h6>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" value="{{row.no_kk}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>No. KTP</b></h6>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" value="{{row.no_ktp}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Tempat Lahir</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.tempat_lahir}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Tanggal Lahir</b></h6>
+              <div class="form-group input-group">
+                <input type="date" class="form-control" value="{{row.tanggal_lahir}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Telp/No. Hp</b></h6>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" value="{{row.telp}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Alamat</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.alamat}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Koordinat</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.pin_kordinat}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <form action="{{ url_for('main.input_data_individu_petani_delete') }}" method="POST">
+                  <div class="modal-footer">
+                    <input type="hidden"  name="id_petani" value="{{row.id_petani}}">
+                    <button class="btn btn-primary btn-dgr" type="submit">Hapus</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+  <!-- DataTables  & Plugins -->
+  <script src="../static/plugins/dashboard/datatables/jquery.dataTables.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/jszip/jszip.min.js"></script>
+  <script src="../static/plugins/dashboard/pdfmake/pdfmake.min.js"></script>
+  <script src="../static/plugins/dashboard/pdfmake/vfs_fonts.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.html5.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.print.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.colVis.min.js"></script>
+  <script>
+    $(function () {
+      $('#example2').DataTable({
+        "paging": false,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": false,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
+{% endblock %}

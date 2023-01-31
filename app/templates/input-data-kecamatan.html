@@ -1,0 +1,269 @@
+{% extends 'base-input-data.html' %}
+
+{% block head %}
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-buttons/css/buttons.bootstrap4.min.css">
+{% endblock %}
+
+{% block body %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-success alert-dismissable" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                      <span aria-hidden="true" class="bi bi-x-lg"></span>
+                  </button>
+                {% if category == 'pass-error'%}
+                  {{ message }}.
+                {% else %}
+                  {{ message }}.
+                {% endif %}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Tabel Data Kecamatan</h3>
+                <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body" style="padding:20px 20px 0px 20px">
+                <table id="example2" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nama Kecamatan</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in kecamatan.items %}
+                      <tr>
+                        <td>{{row.id_kec}}</td>
+                        <td>{{row.nama}}</td>
+                        <td>
+                          <a class="edit-input-data-btn" href="/input-data/data-kecamatan/update/{{row.id_kec}}" data-toggle="modal" data-target="#modaledit{{row.id_kec}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-kecamatan/delete/{{row.id_kec}}" data-toggle="modal" data-target="#modaldelete{{row.id_kec}}">Hapus</a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+              <div class="card-body" style="padding: 10px 20px 20px 20px">
+                <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                      <div class="dataTables_info" id="example2_info" role="status" aria-live="polite" style="padding: 10px 0px 0px 0px">Menampilkan {{fdata}}-{{ldata}} dari {{data}} entri</div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                      <div class="dataTables_paginate paging_simple_numbers">
+                        <ul class="pagination">
+                          {% if kecamatan.has_prev %}
+                            <li class="paginate_button page-item previous"><a href="{{ url_for('main.input_data_kecamatan', page=kecamatan.prev_num) }}" class="page-link">&lt;</a></li>
+                          {% else %}
+                            <li class="paginate_button page-item previous disabled"><a href="#" class="page-link">&lt;</a></li>
+                          {% endif %}
+                          <li class="paginate_button page-item active">
+                            <a class="page-link">{{page}}</a>
+                          </li>
+                          {% if kecamatan.has_next %}
+                            <li class="paginate_button page-item next"><a href="{{ url_for('main.input_data_kecamatan', page=kecamatan.next_num) }}" class="page-link">&gt;</a></li>
+                          {% else %}
+                            <li class="paginate_button page-item next disabled"><a href="#" class="page-link">&gt;</a></li>
+                          {% endif %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+  <!-- Modal Edit Kecamatan-->
+  {% for row in kecamatan.items %}
+    <div id="modaledit{{row.id_kec}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Ubah Data Kecamatan</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+              <form action="{{ url_for('main.input_data_kecamatan_update') }}" method="POST">
+                <div class="form-group input-group">
+                  <input type="hidden"  name="id_kecamatan" value="{{row.id_kec}}">
+                  <input type="text" class="form-control" name="nama" placeholder="Nama Kecamatan" value="{{row.nama}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-primary btn-wrn" type="submit">Ubah</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+              
+  <!-- Modal Add Kecamatan-->
+  <div id="mymodal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Tambah Kecamatan</h4>
+          </div>
+          <div class="modal-body card-body register-card-body">
+            <form action="{{url_for('main.input_data_kecamatan_add')}}" method="POST">
+              <div class="form-group input-group">
+                <select name="provinsi" id="prov-add-response" class="form-control add" required> 
+                  <option value="" disabled selected hidden>Provinsi</option>  
+                  {% for row in provinsi %} 
+                    <option value="{{ row.id_prov }}">{{ row.id_prov }} | {{ row.nama }}</option>
+                  {% endfor %}
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="kabupaten" class="form-control add" id="kab-add-response" required> 
+                  <option value="" disabled selected hidden>Kabupaten</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" name="id_kec" placeholder="ID Kecamatan" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" name="nama" placeholder="Nama Kecamatan" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary btn-success" type="submit">Tambah</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              </div>
+            </form>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Delete Kecamatan-->
+  {% for row in kecamatan.items %}
+    <div id="modaldelete{{row.id_kec}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Hapus Data Kecamatan</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+              <h6><b>ID</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.id_kec}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Nama Kecamatan</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" name="nama" placeholder="Nama Kecamatan" value="{{row.nama}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <form action="{{ url_for('main.input_data_kecamatan_delete') }}" method="POST">
+                  <div class="modal-footer">
+                    <input type="hidden"  name="id_kec" value="{{row.id_kec}}">
+                    <button class="btn btn-primary btn-dgr" type="submit">Hapus</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+  <!-- DataTables  & Plugins -->
+  <script src="../static/plugins/dashboard/datatables/jquery.dataTables.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/jszip/jszip.min.js"></script>
+  <script src="../static/plugins/dashboard/pdfmake/pdfmake.min.js"></script>
+  <script src="../static/plugins/dashboard/pdfmake/vfs_fonts.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.html5.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.print.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.colVis.min.js"></script>
+  <script>
+    $(function () {
+      $('#example2').DataTable({
+        "paging": false,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": false,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
+{% endblock %}

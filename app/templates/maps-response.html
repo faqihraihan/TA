@@ -1,0 +1,5 @@
+{% for data in datas %}  
+   <li class="result" id="resultdata">
+      <button name="result" id="{{data.id_desa}}" class="result-btn" value="{{data.id_desa}}"><div class="icons-loc"></div><div class="result-text">{{ data.nama }}, {{ data.kecamatan.nama }}, {{ data.kecamatan.kabupaten.nama }}, {{ data.kecamatan.kabupaten.provinsi.nama }}</div></button>
+   </li>
+{% endfor %}
