@@ -94,8 +94,8 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ url_for('main.home') }}" class="brand-link">
-        <img src="../static/img/logo-stp.png" alt="Science Techno Park" class="brand-image" style="opacity: .8">
-        <span class="brand-text font-weight-light">Science Techno Park</span>
+        <!-- <img src="../static/img/logo-stp.png" alt="Science Techno Park" class="brand-image" style="opacity: .8"> -->
+        <span class="brand-text font-weight-light">Smart Platform Geoportal</span>
     </a>
 
     <!-- Sidebar -->
@@ -127,21 +127,21 @@
         </div>
 
         <!-- Sidebar Menu -->
-        <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false"> -->
             <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
-            <li class="nav-item">
+            <!-- <li class="nav-item">
             {% if dashboard_navbar %}
             <a class="nav-link {{ dashboard_navbar }}" disabled>
             {% else %}
             <a href="{{ url_for('main.dashboard') }}" class="nav-link">
-            {% endif %}
+            {% endif %} -->
                 <!-- <i class="nav-icon fas fa-tachometer-alt"></i> -->
-                <div class="dashboard nav-icon"></div>
+                <!-- <div class="dashboard nav-icon"></div>
                 <p>Dashboard</p>
             </a>
-            </li>
+            </li> -->
             <!-- <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-chart-pie"></i>
@@ -252,6 +252,231 @@
                 </p>
             </a>
             </li> -->
+        <!-- </ul>
+        </nav> -->
+        <!-- /.sidebar-menu -->
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+                with font-awesome or any other icon font library -->
+            <li class="nav-item">
+            {% if input_data_navbar %}
+            <a class="nav-link {{ input_data_navbar }}" disabled>
+            {% else %}
+            <a href="{{ url_for('main.input_data') }}" class="nav-link">
+            {% endif %}
+                <div class="inputdata nav-icon"></div>
+                <p>Input Data</p>
+            </a>
+            </li>
+            <li class="nav-item {% if input_data_wilayah_navbar %} menu-is-opening menu-open {% endif %}">
+            <a href="" class="nav-link {{ input_data_wilayah_navbar }}">
+                <div class="wilayah nav-icon"></div>
+                <p>
+                Data Wilayah
+                <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                {% if input_data_provinsi_navbar %}
+                <a class="nav-link {{ input_data_provinsi_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_provinsi') }}" class="nav-link">
+                {% endif %}
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Provinsi</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                {% if input_data_kabupaten_navbar %}
+                <a class="nav-link {{ input_data_kabupaten_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_kabupaten') }}" class="nav-link">
+                {% endif %}
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kabupaten/Kota</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                {% if input_data_kecamatan_navbar %}
+                <a class="nav-link {{ input_data_kecamatan_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_kecamatan') }}" class="nav-link">
+                {% endif %}
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kecamatan</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                {% if input_data_desa_navbar %}
+                <a class="nav-link {{ input_data_desa_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_desa') }}" class="nav-link">
+                {% endif %}
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Desa</p>
+                </a>
+                </li>
+            </ul>
+            </li>
+            <li class="nav-item {% if input_data_pertanian_navbar %} menu-is-opening menu-open {% endif %}">
+            <a href="" class="nav-link {{ input_data_pertanian_navbar }}">
+                <div class="pertanian nav-icon"></div>
+                <p>
+                Data Pertanian
+                <i class="fas fa-angle-left right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                {% if input_data_gapoktan_navbar %}
+                <a class="nav-link {{ input_data_gapoktan_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_gapoktan') }}" class="nav-link">
+                {% endif %}
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Gapoktan</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                {% if input_data_kelompok_tani_navbar %}
+                <a class="nav-link {{ input_data_kelompok_tani_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_kelompok_tani') }}" class="nav-link">
+                {% endif %}
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kelompok Tani</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                {% if input_data_individu_petani_navbar %}
+                <a class="nav-link {{ input_data_individu_petani_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_individu_petani') }}" class="nav-link">
+                {% endif %}
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Petani</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                {% if input_data_individu_lahan_navbar %}
+                <a class="nav-link {{ input_data_individu_lahan_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_individu_lahan') }}" class="nav-link">
+                {% endif %}
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Lahan</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                {% if input_data_komoditas_navbar %}
+                <a class="nav-link {{ input_data_komoditas_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_komoditas') }}" class="nav-link">
+                {% endif %}
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Komoditas</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                {% if input_data_pupuk_navbar %}
+                <a class="nav-link {{ input_data_pupuk_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_pupuk') }}" class="nav-link">
+                {% endif %}
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pupuk</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                {% if input_data_racun_navbar %}
+                <a class="nav-link {{ input_data_racun_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_racun') }}" class="nav-link">
+                {% endif %}
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Racun</p>
+                </a>
+                </li>
+                <li class="nav-item {% if input_data_log_pertanian_navbar %} menu-is-opening menu-open {% endif %}">
+                <a href="" class="nav-link {{ input_data_log_pertanian_navbar }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                    Log
+                    <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                    {% if input_data_log_tanam_navbar %}
+                    <a class="nav-link {{ input_data_log_tanam_navbar }}" disabled>
+                    {% else %}
+                    <a href="{{ url_for('main.input_data_log_tanam') }}" class="nav-link">
+                    {% endif %}
+                        <i class="fas fa-circle nav-icon"></i>
+                        <p>Log Tanam</p>
+                    </a>
+                    </li>
+                    <li class="nav-item">
+                    {% if input_data_log_pupuk_pertanian_navbar %}
+                    <a class="nav-link {{ input_data_log_pupuk_pertanian_navbar }}" disabled>
+                    {% else %}
+                    <a href="{{ url_for('main.input_data_log_pupuk_pertanian') }}" class="nav-link">
+                    {% endif %}
+                        <i class="fas fa-circle nav-icon"></i>
+                        <p>Detail Log Pupuk</p>
+                    </a>
+                    </li>
+                    <li class="nav-item">
+                    {% if input_data_log_racun_pertanian_navbar %}
+                    <a class="nav-link {{ input_data_log_racun_pertanian_navbar }}" disabled>
+                    {% else %}
+                    <a href="{{ url_for('main.input_data_log_racun_pertanian') }}" class="nav-link">
+                    {% endif %}
+                        <i class="fas fa-circle nav-icon"></i>
+                        <p>Detail Log Racun</p>
+                    </a>
+                    </li>
+                </ul>
+                </li>
+            </ul>
+            </li>
+            <!-- <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-egg"></i>
+                <p>
+                Data Peternakan
+                <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Coming Soon</p>
+                </a>
+                </li>
+            </ul>
+            </li>
+            <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-fish"></i>
+                <p>
+                Data Perikanan
+                <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Coming Soon</p>
+                </a>
+                </li>
+            </ul>
+            </li> -->
         </ul>
         </nav>
         <!-- /.sidebar-menu -->
@@ -262,7 +487,7 @@
 
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-        Copyright &copy; <strong>2022 <a href="{{ url_for('main.home') }}" class="copyrfooter">STP Office</a>.</strong>
+        Copyright &copy; <strong>2023 <a href="{{ url_for('main.home') }}" class="copyrfooter">Smart Platform Geoportal</a>.</strong>
         All rights reserved.
     </footer>
 
@@ -310,5 +535,126 @@
     <script src="../static/js/pages/dashboard.js"></script>
 
     {% block scripts %}{% endblock %}
+
+    <script>
+        $(function () {
+            var donutData        = {
+            labels: [
+                'Beras',
+                'Jagung',
+                'Ikan',
+            ],
+            datasets: [
+                {
+                data: [700,500,400],
+                backgroundColor : ['#f56954', '#00a65a', '#f39c12'],
+                }
+            ]
+            }
+
+            //-------------
+            //- PIE CHART -
+            //-------------
+            // Get context with jQuery - using jQuery's .get() method.
+            var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+            var pieData        = donutData;
+            var pieOptions     = {
+            maintainAspectRatio : false,
+            responsive : true,
+            }
+            //Create pie or douhnut chart
+            // You can switch between pie and douhnut using the method below.
+            new Chart(pieChartCanvas, {
+            type: 'pie',
+            data: pieData,
+            options: pieOptions
+            })
+            
+            var ticksStyle = {
+                fontColor: '#495057',
+                fontStyle: 'bold'
+            }
+
+            var mode = 'index'
+            var intersect = true
+
+            var $visitorsChart = $('#visitors-chart')
+            // eslint-disable-next-line no-unused-vars
+            var visitorsChart = new Chart($visitorsChart, {
+                data: {
+                labels: ['18th', '20th', '22nd', '24th', '26th', '28th', '30th'],
+                datasets: [{
+                    type: 'line',
+                    data: [100, 120, 170, 167, 180, 177, 160],
+                    backgroundColor: 'transparent',
+                    borderColor: '#f56954',
+                    pointBorderColor: '#f56954',
+                    pointBackgroundColor: '#f56954',
+                    fill: false
+                    // pointHoverBackgroundColor: '#007bff',
+                    // pointHoverBorderColor    : '#007bff'
+                },
+                {
+                    type: 'line',
+                    data: [60, 80, 70, 67, 80, 77, 100],
+                    backgroundColor: 'tansparent',
+                    borderColor: '#00a65a',
+                    pointBorderColor: '#00a65a',
+                    pointBackgroundColor: '#00a65a',
+                    fill: false
+                    // pointHoverBackgroundColor: '#ced4da',
+                    // pointHoverBorderColor    : '#ced4da'
+                },
+                {
+                    type: 'line',
+                    data: [110, 100, 150, 170, 130, 100, 120],
+                    backgroundColor: 'tansparent',
+                    borderColor: '#f39c12',
+                    pointBorderColor: '#f39c12',
+                    pointBackgroundColor: '#f39c12',
+                    fill: false
+                    // pointHoverBackgroundColor: '#ced4da',
+                    // pointHoverBorderColor    : '#ced4da'
+                }]
+                },
+                options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    mode: mode,
+                    intersect: intersect
+                },
+                hover: {
+                    mode: mode,
+                    intersect: intersect
+                },
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                    // display: false,
+                    gridLines: {
+                        display: true,
+                        lineWidth: '4px',
+                        color: 'rgba(0, 0, 0, .2)',
+                        zeroLineColor: 'transparent'
+                    },
+                    ticks: $.extend({
+                        beginAtZero: true,
+                        suggestedMax: 200
+                    }, ticksStyle)
+                    }],
+                    xAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: ticksStyle
+                    }]
+                }
+                }
+            })
+        })
+    </script>
 </body>
 </html>

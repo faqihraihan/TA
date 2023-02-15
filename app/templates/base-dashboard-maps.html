@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>STP Universitas Hasanuddin</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{{ url_for('static', filename='img/favicon.png') }}" rel="icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../static/plugins/dashboard/fontawesome-free/css/all.min.css">
+
+    <!-- Template Main CSS File -->
+    <link href="{{ url_for('static', filename='css/dashboard-maps.css') }}" rel="stylesheet">
+
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% block body %}{% endblock %}
+    {% include 'gis-dashboard-maps.html' %}
+
+    <!-- jQuery -->
+    <script src="../static/plugins/dashboard/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="../static/plugins/dashboard/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Maps -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
+</body>
+</html>

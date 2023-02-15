@@ -1,0 +1,26 @@
+{% extends 'base-dashboard-maps.html' %}
+
+{% block body %}
+    <div class="nav">
+        <form action="{{ url_for('main.dashboard_map') }}" method="POST" id="formsearch">
+            <div id="nav-search" class="nav-search">
+                <input type="text" name="search" id="search" class="search active" placeholder="Temukan Disini" spellcheck="false" autocomplete="off" {% if not id %} autofocus=True {% endif %} {% if id %} value="{{ search }}" disabled {% endif %} value="Desa Batu, Kecamatan Pitu Riase, Kab. Sidenreng Rappang, Prov. Sulawesi Selatan">
+                <div id="nav-btn" class="nav-btn">
+                    {% if id %}
+                        <button id="reset-btn" class="reset-btn"><div></div></button>
+                    {% else %}
+                        <button name="search-btn" id="search-btn" class="search-btn" value="search"><div></div></button>
+                    {% endif %}
+                </div>
+                <div id="result" class="navresult">
+                    <div id="result-list" class="result-list">
+                        <ul class="search-list" id="search-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="focus" id="focus-btn">
+            <div class="focus-btn"></div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,282 @@
+html, body{
+    margin: 0px;
+}
+
+a{
+    color: #000;
+    text-decoration: none;
+}
+
+button{
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+/* Navigasi Search Map Pemanfaatan Desa */
+.nav .nav-search{
+    width: 32rem;
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    z-index: 402;
+    top: 1rem;
+    left: 1rem;
+    border-radius: 0.7rem;
+    font-size: 0;
+}
+
+.nav .nav-search .search{
+    outline: none;
+    border: none;
+    font-size: 14px;
+    height: 3.8rem;
+    width: 27rem;
+    padding-left: 1.8rem;
+    color: #444444;
+    background-color: rgb(255, 255, 255);
+    vertical-align: middle;
+    border-radius: 0.7rem;
+}
+
+.nav .nav-search .search.active{
+    opacity: .6;
+}
+
+.nav .nav-search .search::placeholder{
+    color: rgba(68, 68, 68, 0.3);
+    font-size: 14px;
+    font-family: "Nunito", sans-serif;
+    font-weight: bold;
+    position: relative;
+}
+
+.nav .nav-search .sidebar-btn, .nav .nav-search .search-btn, .nav .nav-search .reset-btn{
+    height: 38px;
+    width: 46px;
+    opacity: .8;
+}
+
+.nav .nav-search .sidebar-btn:hover, .nav .nav-search .search-btn:hover, .nav .nav-search .reset-btn:hover{
+    opacity: 1;
+}
+
+.nav .nav-search .sidebar-btn div{
+    display: inline-block;
+    background: no-repeat url(../img/icons/menu-24.png);
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    line-height: 38px;
+    vertical-align: middle;
+}
+
+.nav .nav-search .search-btn div{
+    display: inline-block;
+    background: no-repeat url(../img/icons/search-24.png);
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    line-height: 38px;
+    vertical-align: middle;
+}
+
+.nav .nav-search .reset-btn div{
+    display: inline-block;
+    background: no-repeat url(../img/icons/close-24.png);
+    background-size: 20px;
+    height: 20px;
+    width: 20px;
+    line-height: 38px;
+    vertical-align: middle;
+}
+
+.nav .nav-search .nav-btn{
+    display: inline-block;
+    font-size: 0;
+}
+
+.nav .nav-search .result-list{
+    background-color: #fff;
+    padding: 8px 0;
+    box-shadow: inset 0 3px 2px -2px rgba(153, 153, 153, 50%);
+    display: none;
+    border-radius: 0 0 .7rem .7rem;
+}
+
+.nav .nav-search .result-list.active{
+    display: block;
+}
+
+.nav .nav-search .navresult .icons-loc{
+    display: inline-block;
+    background: no-repeat url(../img/icons/region-24.png);
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    line-height: 24px;
+    vertical-align: middle;
+    opacity: .6;
+    margin: 0 15px 0 14px;
+}
+
+.nav .nav-search .navresult .icons-search{
+    display: inline-block;
+    background: no-repeat url(../img/icons/search-24.png);
+    background-size: 18px;
+    height: 18px;
+    width: 18px;
+    line-height: 24px;
+    vertical-align: middle;
+    opacity: .6;
+    margin: 0 15px 0 14px;
+}
+
+.nav .nav-search .navresult .result-text{
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 270px;
+    line-height: 24px;
+    vertical-align: middle;
+}
+
+.nav .view-sidebar{
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    position: fixed;
+    opacity: .0;
+    z-index: 9999;
+    visibility: hidden;
+    transition: all .2s ease-out;
+}
+
+.nav .view-sidebar.active{
+    opacity: .3;
+    visibility: visible;
+}
+
+.nav .sidebar{
+    height: 100%;
+    width: 320px;
+    background-color: #fff;
+    position: fixed;
+    z-index: 9999;
+    left: -42rem;
+    transition: all .2s ease-out;
+}
+
+.nav .sidebar.active{
+    left: 0rem;
+}
+
+.search-list{
+    font-size: 12px;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.search-list .result .result-btn, .search-list .result p{
+    font-family: "Nunito", sans-serif;
+    color: rgb(68, 68, 68);
+    text-decoration: none;
+    text-align: left;
+    white-space: nowrap;
+    width: 20px;
+}
+
+.search-list .result{
+    line-height: 24px;
+    padding: 6px 0 7px;
+}
+
+.search-list .result:hover{
+    background-color: rgb(243, 243, 243);
+}
+
+/* Navigasi Right-Bottom Pemanfaatan Desa */
+.nav .focus{
+    height: 25px;
+    width: 25px;
+    line-height: 25px;
+    border-radius: 0.8rem;
+    position: fixed;
+    z-index: 401;
+    bottom: 7rem;
+    right: 1.2rem;
+    background-color: rgb(255, 255, 255);
+}
+
+.nav .focus .focus-btn{
+    display: inline-block;
+    background: no-repeat url(../img/icons/focus-24.png);
+    background-position: center;
+    background-size: 13px;
+    height: 25px;
+    width: 25px;
+    filter: brightness(0) saturate(100%) invert(21%) sepia(11%) saturate(117%) hue-rotate(325deg) brightness(101%) contrast(82%);
+    cursor: pointer;
+}
+
+.leaflet-control-attribution{
+    display: none !important;
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-in{
+    height: 25px !important;
+    width: 25px !important;
+    line-height: 25px !important;
+    border-radius: 0.8rem !important;
+    position: fixed;
+    bottom: 4.1rem;
+    right: 1.2rem;
+    box-shadow: none;
+    color: rgb(68, 68, 68);
+    font-size: 18px !important;
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-out{
+    height: 25px !important;
+    width: 25px !important;
+    line-height: 25px !important;
+    border-radius: 0.8rem !important;
+    position: fixed;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    box-shadow: none;
+    color: rgb(68, 68, 68);
+    font-size: 18px !important;
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-in:hover{
+    height: 25px !important;
+    width: 25px !important;
+    line-height: 25px !important;
+    background-color: rgb(255, 255, 255);
+    font: 18px !important;
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-out:hover{
+    height: 25px !important;
+    width: 25px !important;
+    line-height: 25px !important;
+    background-color: rgb(255, 255, 255);
+    font: 18px !important;
+}
+
+.leaflet-bar a.leaflet-disabled:hover {
+    background-color: #f4f4f4;
+    color: #bbb;
+}
+
+/* Navigasi Mouse Position Map Pemanfaatan Desa */
+.leaflet-container .leaflet-control-mouseposition {
+    background-color: rgba(0,0,0,.6) !important;
+    box-shadow: none !important;
+    color: #fff !important;
+    font: 10px/1.5 "Helvetica Neue",Arial,Helvetica,sans-serif !important;
+}

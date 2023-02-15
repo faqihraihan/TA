@@ -63,9 +63,6 @@ def gis(maps=None, id=None):
             data = Desa.query.filter_by(id_desa=id).first()
             data2 = Lahan.query.join(Petani).join(Kelompok_Tani).filter(Kelompok_Tani.id_desa==id).all()
             search = data.nama+', '+data.kecamatan.nama+', '+data.kecamatan.kabupaten.nama+', '+data.kecamatan.kabupaten.provinsi.nama
-        # else:
-        #     data = Lahan.query.filter_by(id_lahan=id).first()
-        #     search = 'Lahan '+data.petani.nama
 
         if not data.polygon:
             flash("Peta tidak ditemukan")
@@ -74,12 +71,8 @@ def gis(maps=None, id=None):
         m = folium.Map(location=[-1.1265694, 118.6380067],
             zoom_start=5, min_zoom=5)
 
-        # layer2 = gpd.read_file(data2.polygon)
-        # layer2 = layer2.to_crs("EPSG:4326")
-
         if maps == "desa":
             layer = gpd.read_file(data.polygon)
-            layer = layer.to_crs(epsg=4326)
 
             for x in layer.index:
                 color = 'white'
@@ -106,8 +99,6 @@ def gis(maps=None, id=None):
             
             for row in data2:
                 layer2 = gpd.read_file(row.polygon)
-                layer2.crs
-                layer2 = layer2.to_crs(epsg=4326)
 
                 for x in layer2.index:
                     color = np.random.randint(16, 256, size=3)
@@ -227,6 +218,46 @@ def dashboard():
 
     return render_template('dashboard.html', foto=foto, name=current_user.nama, level=current_user.level, gapoktan=gapoktan, poktan=poktan, petani=petani, lahan=lahan, dashboard_navbar=active)
 
+@ main.route("/gis-dashboard", methods=['GET', 'POST'])
+@ login_required
+def dashboard_map():
+    m = folium.Map(location=[-1.1265694, 118.6380067], zoom_start=4, min_zoom=4)
+
+    data = Desa.query.filter_by(id_desa='1111').first()
+
+    layer = gpd.read_file(data.polygon)
+    layer = layer.to_crs(epsg=4326)
+
+    for x in layer.index:
+        color = 'white'
+        layer.at[x, 'color'] = color
+
+    def style(feature):
+        return {
+            'fillColor': feature['properties']['color'],
+            'color': feature['properties']['color'],
+            'weight': 2,
+            'fillOpacity': 0,
+            'dashArray': '5, 5',
+        }
+
+    gjson = folium.GeoJson(layer, name=data.nama, style_function=style).add_to(m)
+
+    m.fit_bounds(gjson.get_bounds())
+
+    tile_layer = folium.TileLayer(
+            tiles="http://www.google.com/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}",
+            attr='google.com',
+            max_zoom=19,
+            name='darkmatter',
+            control=False,
+            opacity=1
+        )
+    tile_layer.add_to(m)
+
+    m.save("app/templates/gis-dashboard-maps.html")
+
+    return render_template('dashboard-maps.html')
 
 @ main.route("/input-data")
 @ login_required
